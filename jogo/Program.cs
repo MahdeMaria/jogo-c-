@@ -5,50 +5,57 @@ class Program
 {
     static void Main()
     {
-        Program jogo = new Program();
-        jogo.ExecutarJogo();
-    }
-
-    public void ExecutarJogo()
-    {
-        char[] palavraChave = {'c','a','v','a','l','o'};
-        char[] palavraOculta = new string('_', palavraChave.Length).ToCharArray();
-        bool continuar = true;
-        int tentativas = 0;
-
-        Console.WriteLine("Bem-vindo(a) ao jogo da forca!");
-        Console.WriteLine("DICA: A palavra secreta é um animal mamífero");
-
-        while (continuar)
+        string[] palavras = { "programacao", "desenvolvimento", "computador", "teclado", "software" };
+        Random random = new Random();
+        string palavraSecreta = palavras[random.Next(palavras.Length)];
+        char[] palavraOculta = new string('_', palavraSecreta.Length).ToCharArray();
+        List<char> tentativas = new List<char>();
+        int tentativasRestantes = 6;
+        
+        while (tentativasRestantes > 0 && new string(palavraOculta) != palavraSecreta)
         {
+            Console.Clear();
+            Console.WriteLine("Jogo da Forca");
             Console.WriteLine("Palavra: " + new string(palavraOculta));
-            Console.WriteLine("Digite uma letra:");
-            char letra = Console.ReadLine()?.FirstOrDefault() ?? ' ';;
-            Console.WriteLine("\nPalavra: " + new string(palavraOculta));
+            Console.WriteLine("Tentativas restantes: " + tentativasRestantes);
+            Console.WriteLine("Letras tentadas: " + string.Join(", ", tentativas));
+            Console.Write("Digite uma letra: ");
+            char tentativa = char.ToLower(Console.ReadKey().KeyChar);
+            Console.WriteLine();
 
-            if (palavraChave.Contains(letra))
+            if (tentativas.Contains(tentativa))
             {
-                Console.WriteLine("Parabéns! A letra está na palavra secreta");
-                for (int i = 0; i < palavraChave.Length; i++)
+                Console.WriteLine("Você já tentou essa letra!");
+                Console.ReadKey();
+                continue;
+            }
+
+            tentativas.Add(tentativa);
+
+            if (palavraSecreta.Contains(tentativa))
+            {
+                for (int i = 0; i < palavraSecreta.Length; i++)
                 {
-                    if (palavraChave[i] == letra)
+                    if (palavraSecreta[i] == tentativa)
                     {
-                        palavraOculta[i] = letra;
+                        palavraOculta[i] = tentativa;
                     }
                 }
             }
             else
             {
-                Console.WriteLine("Errou! Tente novamente");
+                tentativasRestantes--;
             }
+        }
 
-            tentativas++;
-
-            if (tentativas >= 10)
-            {
-                Console.WriteLine("Ops! Parece que acabaram suas tentativas.");
-                continuar = false;
-            }
+        Console.Clear();
+        if (new string(palavraOculta) == palavraSecreta)
+        {
+            Console.WriteLine("Parabéns! Você acertou a palavra: " + palavraSecreta);
+        }
+        else
+        {
+            Console.WriteLine("Fim de jogo! A palavra era: " + palavraSecreta);
         }
     }
 }
