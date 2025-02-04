@@ -1,3 +1,3 @@
 # Jogo da Velha!
 
-Jogo desenvolvido para praticar c#
+Jogo desenvolvido para praticar
